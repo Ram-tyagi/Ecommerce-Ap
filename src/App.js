@@ -4,6 +4,8 @@ import Cart from "./Components/Cart/Cart";
 import Store from "./Components/Store";
 import Header from "./Components/Layouts/Header";
 import  Footer  from "./Components/Layouts/Footer";
+import CartProvider from "./Components/Store/CartProvider";
+
 function App() {
  
     const [storeVisible, setStoreVisible] = useState(false);
@@ -22,13 +24,18 @@ function App() {
   
     };
     return (
-    
-      <div style={{backgroundColor: "#ffff66"}}>
-        <Header onClickStore={visibleStoreHandler} onClickCart={visibleCartHandler} />
+      <CartProvider>
+      <div>
+        <Header
+          onClickStore={visibleStoreHandler}
+          onClickCart={visibleCartHandler}
+        />
         {storeVisible && <Store />}
         {cartVisible && <Cart />}
         <Footer />
       </div>
+    </CartProvider>
+      
   );
 }
 
