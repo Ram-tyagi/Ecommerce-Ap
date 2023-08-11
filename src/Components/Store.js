@@ -2,7 +2,7 @@ import React,{useContext} from "react";
 import { Card, Container, Row, Button, Col } from "react-bootstrap";
 import CartContext from "./Store/cart-context";
 import classes from "./Store.module.css";
-import Product from "./Product";
+
 import { Link} from "react-router-dom";
 
 
@@ -44,11 +44,7 @@ const Store = (props) => {
                   >
                     {item.title}
                   </Card.Title>
-                  <Card.Img
-                    variant="top"
-                    src={item.imageUrl[0]}
-                    className={classes.img}
-                  />
+                 
                 </Link>
             <Card.Img variant="top" src={item.imageUrl} className={classes.img}/>
             <Card.Body className={classes.body}>
