@@ -7,7 +7,7 @@ const About = () => {
     <section className={classes.about}>
       <h2>About</h2>
       <div>
-        <img src="https://wallpapercave.com/wp/KtDU8Vg.jpg" />
+        <img src="https://wallpapercave.com/wp/KtDU8Vg.jpg" alt=" " />
         <p>
           Lorem ipsum carrots enhanced rebates. Excellent sayings of a man of
           sorrows, hates no prosecutors will unfold in the enduring of which

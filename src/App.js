@@ -16,7 +16,7 @@ const productsArrs = [
     price: 100,
     imageUrl: [
       "https://prasadyash2411.github.io/ecom-website/img/Album%201.png",
-     
+      "https://prasadyash2411.github.io/ecom-website/img/Album%202.png",
     ],
     des: "Lorem ipsum carrots enhanced rebates. Excellent sayings of a man of sorrows",
   },
@@ -72,7 +72,6 @@ function App() {
         <Route path="/about"  element={ <About />}/>
         <Route path="/store"  element= {storeVisible && <Store  productsArr={productsArrs}/>}/>
         <Route path="/contactus"  element={ <ContactUs />}/>
-        <Route path="login" element={<Login />} />
         <Route path="/store/:productId"  element={<Product productsArr={productsArrs} />}/>
         </Routes>
         {cartVisible && <Cart />}

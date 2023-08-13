@@ -1,7 +1,11 @@
 import React, { useContext, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import AuthContext from "../storeContext/auth-context";
+=======
+import AuthContext from "../../storeContext/auth-context";
+>>>>>>> c783930fbab84e823548504e692a58cb5663218d
 import classes from "./LoginForm.module.css";
 
 const LoginForm = (props) => {
@@ -29,10 +33,17 @@ const LoginForm = (props) => {
     let url;
     if (isLogin) {
       url =
+<<<<<<< HEAD
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDCAh7EqfU4TrGR5BAyTk6Yw1cwRtg_r4U";
     } else {
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDCAh7EqfU4TrGR5BAyTk6Yw1cwRtg_r4U";
+=======
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAgCJqt8e9uIi0y4PYnAcCbdGIidzNmskw";
+    } else {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAgCJqt8e9uIi0y4PYnAcCbdGIidzNmskw";
+>>>>>>> c783930fbab84e823548504e692a58cb5663218d
     }
 
     try {

@@ -17,7 +17,7 @@ const Product = (props) => {
         <div className={classes.image}>
           {prod.imageUrl.map((i) => (
             <li>
-              <img src={i} />
+              <img src={i} alt=" " />
             </li>
           ))}
         </div>
