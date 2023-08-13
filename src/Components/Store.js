@@ -44,11 +44,7 @@ const Store = (props) => {
                   >
                     {item.title}
                   </Card.Title>
-                  <Card.Img
-                    variant="top"
-                    src={item.imageUrl[0]}
-                    className={classes.img}
-                  />
+                  
                 </Link>
             <Card.Img variant="top" src={item.imageUrl} className={classes.img}/>
             <Card.Body className={classes.body}>
