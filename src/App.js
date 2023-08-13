@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom";
-import React, { useState } from "react";
+import { Route, Routes,Navigate } from "react-router-dom";
+import React, { useState,useContext} from "react";
 import Cart from "./Components/Cart/Cart";
 import Store from "./Components/Store";
 import Header from "./Components/Layouts/Header";
@@ -10,13 +10,14 @@ import Home from "./Components/Home/Home";
 import ContactUs from "./Components/ContactUs/ContactUs";
 import Product from "./Components/Product";
 import Login from "./Components/Login/Login";
+import AuthContext from "./Components/storeContext/auth-context";
 const productsArrs = [
   {
     title: "Colors",
     price: 100,
     imageUrl: [
       "https://prasadyash2411.github.io/ecom-website/img/Album%201.png",
-      "https://prasadyash2411.github.io/ecom-website/img/Album%202.png",
+      
     ],
     des: "Lorem ipsum carrots enhanced rebates. Excellent sayings of a man of sorrows",
   },
@@ -47,7 +48,9 @@ function App() {
  
     const [storeVisible, setStoreVisible] = useState(true);
     const [cartVisible, setCartVisible] = useState(false);
-  
+    
+    const authCtx = useContext(AuthContext);
+
     const visibleStoreHandler = () => {
       setStoreVisible(true);
     };
@@ -58,7 +61,8 @@ function App() {
       } else {
         setCartVisible(false);
       }
-  
+
+     
     };
     return (
       <CartProvider>
@@ -70,8 +74,8 @@ function App() {
         <Routes>
           <Route path="/"  element={ <Home />}/>
         <Route path="/about"  element={ <About />}/>
-        <Route path="/store"  element= {storeVisible && <Store  productsArr={productsArrs}/>}/>
-        <Route path="/contactus"  element={ <ContactUs />}/>
+        <Route path="store" element={authCtx.isLoggedIn ? <Store productsArr={productsArrs} /> : <Navigate to='/login' />} />        <Route path="/contactus"  element={ <ContactUs />}/>
+        <Route path="/login"  element={ <Login />}/>
         <Route path="/store/:productId"  element={<Product productsArr={productsArrs} />}/>
         </Routes>
         {cartVisible && <Cart />}

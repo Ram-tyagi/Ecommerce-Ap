@@ -4,7 +4,7 @@ import AuthContext from "./auth-context";
 const AuthContextProvider = (props) => {
   const [token, setToken] = useState(null);
 
-  if (token == null && localStorage.length !== 0) {
+  if (token === null && localStorage.length !== 0) {
     setToken(localStorage["user"]);
   }
 
