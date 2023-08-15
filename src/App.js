@@ -1,16 +1,23 @@
 import { Route, Routes,Navigate } from "react-router-dom";
-import React, { useState,useContext} from "react";
-import Cart from "./Components/Cart/Cart";
-import Store from "./Components/Store";
-import Header from "./Components/Layouts/Header";
-import  Footer  from "./Components/Layouts/Footer";
-import CartProvider from "./Components/Store/CartProvider";
-import About from "./Components/About/About";
-import Home from "./Components/Home/Home";
-import ContactUs from "./Components/ContactUs/ContactUs";
-import Product from "./Components/Product";
-import Login from "./Components/Login/Login";
-import AuthContext from "./Components/storeContext/auth-context";
+import React, { useState,useContext,Suspense} from "react";
+
+
+
+const Store = React.lazy(() => import("./Components/Store"));
+const Header = React.lazy(() => import("./Components/Layouts/Header"));
+const Footer = React.lazy(() => import("./Components/Layouts/Footer"));
+const Cart = React.lazy(() => import("./Components/Cart/Cart"));
+const CartProvider = React.lazy(() => import("./Components/Store/CartProvider"));
+const Home = React.lazy(() => import("./Components/Home/Home"));
+const AuthContext = React.lazy(() => import("./Components/storeContext/auth-context"));
+const Login = React.lazy(() => import("./Components/Login/Login"));
+
+const ContactUs = React.lazy(() => import("./Components/ContactUs/ContactUs"));
+const Product = React.lazy(() => import("./Components/Product"));
+const About = React.lazy(() => import("./Components/About/About"));
+
+
+
 const productsArrs = [
   {
     title: "Colors",
@@ -72,11 +79,31 @@ function App() {
           onClickCart={visibleCartHandler}
         />
         <Routes>
-          <Route path="/"  element={ <Home />}/>
-        <Route path="/about"  element={ <About />}/>
-        <Route path="store" element={authCtx.isLoggedIn ? <Store productsArr={productsArrs} /> : <Navigate to='/login' />} />        <Route path="/contactus"  element={ <ContactUs />}/>
-        <Route path="/login"  element={ <Login />}/>
-        <Route path="/store/:productId"  element={<Product productsArr={productsArrs} />}/>
+        <Route index element={<Home />} />
+            <Route
+              path="store"
+              element={
+                authCtx.isLoggedIn ? (
+                  <Suspense fallback={<p>Loading...</p>}><Store productsArr={productsArrs} /></Suspense>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="about"
+              element={
+                <Suspense fallback={<p>Loading...</p>}>
+                  <About />
+                </Suspense>
+              }
+            />
+            <Route path="contactus" element={<Suspense fallback={<p>Loading...</p>}><ContactUs /></Suspense>} />
+            <Route path="login" element={<Suspense fallback={<p>Loading...</p>}><Login /></Suspense>} />
+            <Route
+              path="store/:productId"
+              element={<Suspense fallback={<p>Loading...</p>}><Product productsArr={productsArrs} /></Suspense>}
+            />
         </Routes>
         {cartVisible && <Cart />}
         <Footer />
