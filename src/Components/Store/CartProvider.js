@@ -1,141 +1,144 @@
-import React, { useState,useContext } from "react";
-import CartContext from "./cart-context";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 import AuthContext from "../storeContext/auth-context";
+import CartContext from "./cart-context";
 
+const CartProvider = (props) => {
+  const [itemsArr, updateItemsArr] = useState([]);
+  const authCtx = useContext(AuthContext);
 
-const CartProvider = props => {
+  useEffect(() => {
+    updateItemsArr([]);
+  }, [authCtx.userEmail]);
 
-
-    const authCtx = useContext(AuthContext);
-    const [itemsArr, updateItemsArr] =useState([]);
-
-    const reStore = async () => {
-        try{
-          const email = authCtx.userEmail.replace(/[@.]/g, "");
-          const res = await axios.get(`https://crudcrud.com/api/8a9c6b50d11641249742846e60399601/cart${email}`);
-          const resData = await res.data;
-          let arr = [];
-          resData.forEach(element => { 
-            if(element.cartItems.length !== 0){
-              arr.push(element.cartItems[0])
-            }
-          });
-          updateItemsArr(arr);
-        } catch(error) {
-          console.log('Something wrong on refresh');
-        }
-      }
-    
-      if(authCtx.isLoggedIn && itemsArr.length === 0){
-        reStore();
-      }
-      const addCartItemHandler = (item) => {
-        updateItemsArr([...itemsArr, item]);
-        saveCartItemsToBackend(item);
-      };
-
-      const removeCartItemHandler = async index => {
-        const copyArr = [...itemsArr];
-        let backendId;
-        try{
-          const email = authCtx.userEmail.replace(/[@.]/g, "");
-          const res = await axios.get(`https://crudcrud.com/api/8a9c6b50d11641249742846e60399601/cart${email}`);
-          const resData = await res.data;
-          resData.forEach(element => { 
-            element.cartItems.forEach(cartItem => {
-              if (cartItem.id ===  copyArr[index].id) {
-                backendId = element._id;
-              }
-            });
-          });
-        } catch(error) {
-          console.log('Product is not available on cart');
-        }
-
-        copyArr.splice(index, 1);
-    updateItemsArr(copyArr);
-    try{
-      const email = authCtx.userEmail.replace(/[@.]/g, "");
-      const res = await axios.delete(`https://crudcrud.com/api/8a9c6b50d11641249742846e60399601/cart${email}/${backendId}`);
-    } catch(error) {
-      console.log('Delete Error');
-    }
-
-  };
-
-  const quantityChangeHandler = async eleId => {
-    if(itemsArr.length>0){
-      let backendId;
-    try{
-      const email = authCtx.userEmail.replace(/[@.]/g, "");
-      const res = await axios.get(`https://crudcrud.com/api/8a9c6b50d11641249742846e60399601/cart${email}`);
-      const resData = await res.data;
-      resData.forEach(element => { 
-        element.cartItems.forEach(cartItem => {
-          if (cartItem.id === eleId) {
-            backendId = element._id;
-          }
-          // console.log(cartItem.id);
-        });
-      });
-    } catch(error) {
-      console.log('Product is not available on cart');
-    }
-    const copyArr = [...itemsArr];
-    const index = copyArr.findIndex((obj) => obj.id === eleId);
-    if (index !== -1) {
-      copyArr[index].quantity += 1;
-
-    }
+  const onLoginRestore = async () => {
     try {
       const email = authCtx.userEmail.replace(/[@.]/g, "");
-      const res = await axios.put(
-        `https://crudcrud.com/api/c55dd8b9bc7840c3b5e077c25ba8ff77/cart${email}/${backendId}`,
-        {
-          cartItems: [copyArr[index]],
-        }
+      const res = await axios.get(
+        `https://crudcrud.com/api/717ad0db18f244d28bd3b7da69c9bf4b/cart${email}`
       );
+      const resData = await res.data;
+      let arr = [];
+      resData.forEach((element) => {
+        if (element.cartItems.length !== 0) {
+          arr.push(element.cartItems[0]);
+        }
+      });
+      updateItemsArr([...arr]);
     } catch (error) {
-      console.log("Already updated");
+      console.log("Something wrong on refresh");
     }
-    updateItemsArr(copyArr);
-    }
+  };
+  useEffect(() => {
+    onLoginRestore();
+  }, [authCtx.userEmail]);
+  useEffect(() => {
+    onLoginRestore();
+  }, []);
 
+  const addCartItemHandler = (item) => {
+    updateItemsArr([...itemsArr, item]);
+    saveCartItemsToBackend(item);
   };
 
-  // useEffect(() => {
-    const saveCartItemsToBackend = async (item) => {
-        try {
-          const email = authCtx.userEmail.replace(/[@.]/g, "");
-          const res = await axios.post(
-            `https://crudcrud.com/api/c55dd8b9bc7840c3b5e077c25ba8ff77/cart${email}`,
-            {
-              cartItems: [item],
-            }
-          );
-          console.log("Cart items saved to backend:", res.data);
-        } catch (error) {
-          console.log("Error saving cart items to backend:", error);
-        }
+  const removeCartItemHandler = async (index) => {
+    const copyArr = [...itemsArr];
+    let backendId;
+    try {
+      const email = authCtx.userEmail.replace(/[@.]/g, "");
+      const res = await axios.get(
+        `https://crudcrud.com/api/717ad0db18f244d28bd3b7da69c9bf4b/cart${email}`
+      );
+      const resData = await res.data;
+      resData.forEach((element) => {
+        element.cartItems.forEach((cartItem) => {
+          if (cartItem.id === copyArr[index].id) {
+            backendId = element._id;
+          }
+        });
+      });
+    } catch (error) {
+      console.log("Product is not available on cart");
     }
-    
+    copyArr.splice(index, 1);
+    updateItemsArr(copyArr);
+    try {
+      const email = authCtx.userEmail.replace(/[@.]/g, "");
+      const res = await axios.delete(
+        `https://crudcrud.com/api/717ad0db18f244d28bd3b7da69c9bf4b/cart${email}/${backendId}`
+      );
+    } catch (error) {
+      console.log("Delete Error");
+    }
+  };
 
-    const cartContext = {
-        items: itemsArr,
-        addCartItem: addCartItemHandler,
-        removeCartItem: removeCartItemHandler,
-        quantityChange: quantityChangeHandler
-    };
+  const quantityChangeHandler = async (eleId) => {
+    if (itemsArr.length > 0) {
+      let backendId;
+      try {
+        const email = authCtx.userEmail.replace(/[@.]/g, "");
+        const res = await axios.get(
+          `https://crudcrud.com/api/717ad0db18f244d28bd3b7da69c9bf4b/cart${email}`
+        );
+        const resData = await res.data;
+        resData.forEach((element) => {
+          element.cartItems.forEach((cartItem) => {
+            if (cartItem.id === eleId) {
+              backendId = element._id;
+            }
+          });
+        });
+      } catch (error) {
+        console.log("Product is not available on cart");
+      }
+      const copyArr = [...itemsArr];
+      const index = copyArr.findIndex((obj) => obj.id === eleId);
+      if (index !== -1) {
+        copyArr[index].quantity += 1;
+      }
+      try {
+        const email = authCtx.userEmail.replace(/[@.]/g, "");
+        const res = await axios.put(
+          `https://crudcrud.com/api/717ad0db18f244d28bd3b7da69c9bf4b/cart${email}/${backendId}`,
+          {
+            cartItems: [copyArr[index]],
+          }
+        );
+      } catch (error) {
+        console.log("Already updated");
+      }
+      updateItemsArr(copyArr);
+    }
+  };
+  const saveCartItemsToBackend = async (item) => {
+    try {
+      const email = authCtx.userEmail.replace(/[@.]/g, "");
+      const res = await axios.post(
+        `https://crudcrud.com/api/717ad0db18f244d28bd3b7da69c9bf4b/cart${email}`,
+        {
+          cartItems: [item],
+        }
+      );
+      console.log("Cart items saved to backend:", res.data);
+    } catch (error) {
+      console.log("Error saving cart items to backend:", error);
+    }
+  };
 
+  const cartContext = {
+    items: itemsArr,
+    addCartItem: addCartItemHandler,
+    removeCartItem: removeCartItemHandler,
+    quantityChange: quantityChangeHandler,
+    onLogin: onLoginRestore,
+  };
 
-
-    return (
-        <CartContext.Provider value={cartContext}>
-            {props.children}
-        </CartContext.Provider>
-    )
-}
+  return (
+    <CartContext.Provider value={cartContext}>
+      {props.children}
+    </CartContext.Provider>
+  );
+};
 
 export default CartProvider;

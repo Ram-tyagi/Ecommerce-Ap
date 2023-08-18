@@ -1,15 +1,16 @@
 import { Route, Routes,Navigate } from "react-router-dom";
 import React, { useState,useContext,Suspense} from "react";
-
+import AuthContext from "./Components/storeContext/auth-context";
+import Home from "./Components/Home/Home";
+import Cart from "./Components/Cart/Cart";
 
 
 const Store = React.lazy(() => import("./Components/Store"));
 const Header = React.lazy(() => import("./Components/Layouts/Header"));
 const Footer = React.lazy(() => import("./Components/Layouts/Footer"));
-const Cart = React.lazy(() => import("./Components/Cart/Cart"));
+
 const CartProvider = React.lazy(() => import("./Components/Store/CartProvider"));
-const Home = React.lazy(() => import("./Components/Home/Home"));
-const AuthContext = React.lazy(() => import("./Components/storeContext/auth-context"));
+
 const Login = React.lazy(() => import("./Components/Login/Login"));
 
 const ContactUs = React.lazy(() => import("./Components/ContactUs/ContactUs"));
@@ -79,9 +80,9 @@ function App() {
           onClickCart={visibleCartHandler}
         />
         <Routes>
-        <Route index element={<Home />} />
+        <Route path="/" element={<Home />} />
             <Route
-              path="store"
+              path="/store"
               element={
                 authCtx.isLoggedIn ? (
                   <Suspense fallback={<p>Loading...</p>}><Store productsArr={productsArrs} /></Suspense>
@@ -91,17 +92,17 @@ function App() {
               }
             />
             <Route
-              path="about"
+              path="/about"
               element={
                 <Suspense fallback={<p>Loading...</p>}>
                   <About />
                 </Suspense>
               }
             />
-            <Route path="contactus" element={<Suspense fallback={<p>Loading...</p>}><ContactUs /></Suspense>} />
-            <Route path="login" element={<Suspense fallback={<p>Loading...</p>}><Login /></Suspense>} />
+            <Route path="/contactus" element={<Suspense fallback={<p>Loading...</p>}><ContactUs /></Suspense>} />
+            <Route path="/login" element={<Suspense fallback={<p>Loading...</p>}><Login /></Suspense>} />
             <Route
-              path="store/:productId"
+              path="/store/:productId"
               element={<Suspense fallback={<p>Loading...</p>}><Product productsArr={productsArrs} /></Suspense>}
             />
         </Routes>
