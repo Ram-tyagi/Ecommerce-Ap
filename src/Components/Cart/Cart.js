@@ -8,6 +8,7 @@ import CartContext from "../Store/cart-context";
 
 
 const Cart = (props) => {
+
     const cartCtx = useContext(CartContext);
     const [showCartItem, setShowCartItem] = useState(false);
 
